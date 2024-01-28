@@ -1,0 +1,4 @@
+---
+Solar_Forecast:
+  module: solar_forecast
+  class: Forecast
