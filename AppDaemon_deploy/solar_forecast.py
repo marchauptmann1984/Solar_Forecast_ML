@@ -28,7 +28,7 @@ class Forecast(hass.Hass):
             }                  
         # define start time and call set_sensor
         now = datetime.now()       
-        self.run_every(self.set_sensor,now,600, pars=parameters, scaler=scale, model=forest_reg_best) 
+        self.run_every(self.set_sensor,now, 600, pars=parameters, scaler=scale, model=forest_reg_best) 
     def set_sensor(self, kwargs): 
         # call open meteo API and get weather forecast
         response = requests.get("https://api.open-meteo.com/v1/forecast",params=kwargs["pars"])
@@ -105,13 +105,15 @@ class Forecast(hass.Hass):
         df_fc_d=df_fc.resample('D', on='Time').sum()
         # forecast for current hour
         ind_now=datetime.now().hour-1
-        # forecast for next 12 hours and conversion to battery threshold
-        batt_thres=max(min(100-df_fc.ForeCast.values[ind_now:(ind_now+11)].sum()/14.2*100,95),75)
+        # forecast for next 24 hours and conversion to battery threshold
+        # get the min threshold
+        batt_thresh_min=float(self.entities.input_number.batt_thresh_min.state)
+        batt_thres=max(min(100-df_fc.ForeCast.values[ind_now:(ind_now+23)].sum()/14.2*100,95),batt_thresh_min)
         #print(batt_thres)
         # export
         self.set_state("sensor.solar_forecast_hourly",state=np.round(df_fc.ForeCast.values[ind_now],1),attributes={"friendly_name":"Hourly Solar Forecast", "unit_of_measurement": "kWh", "PeakTimes":list(df_fc.Time.dt.strftime('%Y-%m-%dT%H:%M:%S%z+00:00').values), "PeakHeights": list(np.round(df_fc.ForeCast.values,1))})
         self.set_state("sensor.solar_forecast_daily",state=np.round(df_fc_d.ForeCast.values[0],1),attributes={"friendly_name":"Daily Solar Forecast", "unit_of_measurement": "kWh", "PeakTimes":list(df_fc_d.index.strftime('%Y-%m-%dT%H:%M:%S%z+00:00').values), "PeakHeights": list(np.round(df_fc_d.ForeCast.values,1))})
-        self.set_state("sensor.solar_forecast_next12h",state=np.round(df_fc.ForeCast.values[ind_now:(ind_now+11)].sum(),1),attributes={"friendly_name":"Solar Forecast Next 12h", "unit_of_measurement": "kWh"})
+        self.set_state("sensor.solar_forecast_next12h",state=np.round(df_fc.ForeCast.values[ind_now:(ind_now+23)].sum(),1),attributes={"friendly_name":"Solar Forecast Next 24h", "unit_of_measurement": "kWh"})
         self.set_state("input_number.Battery_management_threshold",state=np.round(batt_thres,0),attributes={"friendly_name":"Battery management threshold", "unit_of_measurement": "%"})
 
         
