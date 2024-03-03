@@ -108,7 +108,7 @@ class Forecast(hass.Hass):
         # forecast for next 24 hours and conversion to battery threshold
         # get the min threshold
         batt_thresh_min=float(self.entities.input_number.batt_thresh_min.state)
-        batt_thres=max(min(100-df_fc.ForeCast.values[ind_now:(ind_now+23)].sum()/14.2*100,95),batt_thresh_min)
+        batt_thres=max(min(100-df_fc.ForeCast.values[ind_now:(ind_now+23)].sum()/14.2*100*2/3,95),batt_thresh_min) # assume 1/3 of it is consumed straightaway
         #print(batt_thres)
         # export
         self.set_state("sensor.solar_forecast_hourly",state=np.round(df_fc.ForeCast.values[ind_now],1),attributes={"friendly_name":"Hourly Solar Forecast", "unit_of_measurement": "kWh", "PeakTimes":list(df_fc.Time.dt.strftime('%Y-%m-%dT%H:%M:%S%z+00:00').values), "PeakHeights": list(np.round(df_fc.ForeCast.values,1))})
