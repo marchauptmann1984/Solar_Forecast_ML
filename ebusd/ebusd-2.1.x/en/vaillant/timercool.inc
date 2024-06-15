@@ -1,0 +1,11 @@
+# type (r[1-9];w;u),circuit,name,[comment],[QQ],ZZ,PBSB,[ID],field1,part (m/s),datatypes/templates,divider/values,unit,comment
+# MC: Cooling periods,,,,,,,,,,,,,
+*r,,,,,,"B515",,,,IGN:1,,,
+*w,,,,,,"B515",,,,,,,
+r;w,,coolingTimer.Monday,Periods Monday,,,,0003,,,timer,,,
+r;w,,coolingTimer.Tuesday,Periods Tuesday,,,,0103,,,timer,,,
+r;w,,coolingTimer.Wednesday,Periods Wednesday,,,,0203,,,timer,,,
+r;w,,coolingTimer.Thursday,Periods Thursday,,,,0303,,,timer,,,
+r;w,,coolingTimer.Friday,Periods Friday,,,,0403,,,timer,,,
+r;w,,coolingTimer.Saturday,Periods Saturday,,,,0503,,,timer,,,
+r;w,,coolingTimer.Sunday,Periods Sunday,,,,0603,,,timer,,,

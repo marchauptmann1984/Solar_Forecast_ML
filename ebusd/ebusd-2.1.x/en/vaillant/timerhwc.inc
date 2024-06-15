@@ -1,0 +1,11 @@
+# type (r[1-9];w;u),circuit,name,[comment],[QQ],ZZ,PBSB,[ID],field1,part (m/s),datatypes/templates,divider/values,unit,comment
+# DHW: Periods,,,,,,,,,,,,,
+*r,,,,,,"B515",,,,IGN:1,,,
+*w,,,,,,"B515",,,,,,,
+r;w,,hwcTimer.Monday,Periods Monday,,,,0001,,,timer,,,
+r;w,,hwcTimer.Tuesday,Periods Tuesday,,,,0101,,,timer,,,
+r;w,,hwcTimer.Wednesday,Periods Wednesday,,,,0201,,,timer,,,
+r;w,,hwcTimer.Thursday,Periods Thursday,,,,0301,,,timer,,,
+r;w,,hwcTimer.Friday,Periods Friday,,,,0401,,,timer,,,
+r;w,,hwcTimer.Saturday,Periods Saturday,,,,0501,,,timer,,,
+r;w,,hwcTimer.Sunday,Periods Sunday,,,,0601,,,timer,,,

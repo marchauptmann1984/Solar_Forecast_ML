@@ -1,0 +1,300 @@
+# type (r[1-9];w;u),circuit,name,[comment],[QQ],ZZ,PBSB,[ID],field1,part (m/s),datatypes/templates,divider/values,unit,comment,field2,part (m/s),datatypes/templates,divider/values,unit,comment,field3,part (m/s),datatypes/templates,divider/values,unit,comment
+#,,CTLV2, sensoCOMFORT VRC 720/2 (SW 0514),,,,,,,,,,
+# ##### General #####,,,,,,,,,,,,,
+*r,,,,,,B524,02000000,,,IGN:4,,,
+*w,,,,,,B524,02010000,,,,,,
+r1,,HwcBivalencePoint,,,,,0100,,,tempv,,,Bivalence point hot water heating
+#r1;w,,ContinousHeating,continous heating,,,,0200,,,tempv,,,"-26=off, when the outside temperature falls below this threshold temperature the continuous heating function is started (off <=> function is disabled)"
+#r;w,,FrostOverrideTime,frost delay time,,,,0300,,,hoursum2,,,delay before frost protection is activated
+#r,,xUnknown04,,,,,0400,,,HEX:*,,,
+#r;w,,GlobalSystemOff,Global System OFF,,,,0700,,,yesno,,,For switching system off
+#r,,xUnknown08,,,,,0800,,,HEX:*,,,
+#r,,xUnknown09,,,,,0900,,,HEX:*,,,
+#r;w,,HwcParallelLoading,hwc parallel loading,,,,0A00,,,onoff,,,heating and hot water parallel
+#r,,xUnknown0B,,,,,0B00,,,HEX:*,,,
+#r;w,,MaxRoomHumidity,max room humidity,,,,0E00,,,UIN,,,maximum room humidity
+#r,,HybridManager,,,,,0F00,,,UCH,0=Trivalence (tariff based);1=Bivalence (Outside temperature based),,Tri/Bi-valence manager
+#r1;w,,TariffAuxHeater,,,,,1000,,,UIN,, ,Secondary heater tariff value
+*r,,,,,,B524,,,,,,,,,,,,,,,,,,,,,,,,,
+#r1;w,,TariffPrimHeaterLow,,,,,020000001100,tariff type,,UCH,, ,Tariff levels,ignore,,IGN:3,,,,low tariff,,UIN,,,Primary heater low tariff value 
+*r,,,,,,B524,02000000,,,IGN:4,,,
+*w,,,,,,B524,02010000,,,,,,
+#r1;w,,TariffPrimHeaterNormal,,,,,1200,,,UIN,, ,Primary heater normal tariff value
+#r,,xUnknown13,,,,,1300,,,HEX:*,,,
+#r;w,,AdaptHeatCurve,adaptive heat curve,,,,1400,,,yesno,,,automatic correction of configured heat curve
+#r,,xUnknown15,,,,,1500,,,HEX:*,,,
+#r;w,,HwcMaxChargeTime,maximale hot water charging time,,,,1700,,,minutes2,,,maximum cylinder charging time
+#r;w,,HwcLockTime,hwc lock time,,,,1800,,,minutes2,,,Lock time hot water current
+#r;w,,SolarFlowRateQuantity,,,,,1900,,,EXP,,l/min,preset flow rate solar circuit for solar yield calculation
+#r;w,,PumpAdditionalTime,pump additional time,,,,1B00,,,minutes2,,,chargepump additional operationtime
+#r,,xUnknown1B,,,,,1C00,,,HEX:*,,,
+#r,,xUnknown1D,,,,,1E00,,,HEX:*,,,
+#r1,,HcDewPoint,,,,,2800,,,tempv,,,Dewpoint
+r1,,HcAlternativePoint,,,,,2200,,,tempv,,,exclusively alternate heating below alternative point (-21=off)
+r1,,HcBivalencePoint,,,,,2300,,,tempv,,,Bivalence point heating
+r1,,BackupBoiler,,,,,2400,,,backmode2,,,Function of back-up boiler (Off/Hc/Hwc/Hc+Hwc)
+#r,,xUnknown25,,,,,2500,,,HEX:*,,,
+#r,,HcEmergencyTemperature,,,,,2600,,,tempv,,,Emergency operation temperature
+#r;w,,HwcChargeHysteresis,hysteresis cylinder charge,,,,2700,,,calibrationv,,,hysteris storage tank loading
+#r;w,,HwcChargeOffset,offset cylinder charge,,,,2900,,,calibrationv,,,storage tank loading
+#r3;w,,HwcLegionellaTime,,,,,2A00,,,HTM,,,Time hot water legionella run is scheduled (when HwcLegionellaDay is not 0)
+#r3;w,,HwcLegionellaDay,,,,,2B00,,,daysel2,,,Day hot water legionella run is scheduled
+#r;w,,MaintenanceDate,next maintenance,,,,2C00,,,date,,,date next maintenance
+#r;w,,OffsetOutsideTemp,,,,,2D00,,,tempv,,K,Offset outside temperature (used to determined DisplayedOutsideTemp)
+#r,,xUnknown2F,,,,,2F00,,,HEX:*,,,
+#r,,xUnknown31,,,,,3100,,,HEX:*,,,
+#r4;w,,Date,date,,,,3400,,,date,,,current date
+#r4;w,,Time,time,,,,3500,,,HTI,,,current time
+#r;w,,HydraulicScheme,system schema,,,,3600,,,UIN,,,system scheme
+#r2;w,,CoolingOutsideTempThreshold,,,,,3800,,,tempv,,,Activate Cooling when average outside temperature exceeds threshold
+r1,,WaterPressure,water pressure,,,,3900,,,pressv,,,water pressure
+r1,,DewPointOffset,,,,,3A00,,,tempv,,,Subtract from z1RoomTemp to get dew point
+#r,,xUnknown3C,,,,,3C00,,,HEX:*,,,
+#r;w,,SolarYieldTotal,total solar yield,,,,3D00,,,energy4,,,solar yield total
+#r5;w,,YieldTotal,total environmental yield,,,,3E00,,,energy4,,,envrionment yield total
+#r;w,,ESCOBlockFunction,,,,,4500,,,escomode,,,Function to deactivate when Energy Supply Company sends a blocking signal
+#r;w,,HwcMaxFlowTempDesired,hwc max flow temp desired,,,,4600,,,tempv,,,maximum flow temperature setpoint of Hwc
+#r,,xUnknown47,,,,,4700,,,HEX:*,,,
+#r,,xUnknown48,,,,,4800,,,HEX:*,,,0100 before SWW run/0300 during SWW run
+#r,,xUnknown4A,,,,,4A00,,,HEX:*,,,
+r1,,SystemFlowTemp,system flow temp,,,,4B00,,,tempv,,,system flow temperature
+#r1,,SystemFlowTemp2,system flow temp2,,,,4C00,,,tempv,,,system flow temperature
+#r;w,,MultiRelaySetting,multifunction relay setting,,,,4D00,,,mamode,,,
+#r;w,,PrFuelSumHcThisMonth,this months fuel consumption heating,,,,4E00,,,energy4,,,current month fuel consumption heating
+#r;w,,PrEnergySumHcThisMonth,this months energy consumption heating,,,,4F00,,,energy4,,,current month electricity consumption heating
+#r;w,,PrEnergySumHwcThisMonth,this months energy consumption hot water,,,,5000,,,energy4,,,current month electricity consumption hot water
+#r;w,,PrFuelSumHwcThisMonth,this months fuel consumption hot water,,,,5100,,,energy4,,,Current Month fuel consumption hot water
+#r;w,,PrFuelSumHcLastMonth,last months fuel consumption heating,,,,5200,,,energy4,,,last month fuel consumption heating
+#r;w,,PrEnergySumHcLastMonth,last months energy consumption heating,,,,5300,,,energy4,,,last month electricity consumption heating
+#r;w,,PrEnergySumHwcLastMonth,last months energy consumption hot water,,,,5400,,,energy4,,,last month electricity consumption hot water
+#r;w,,PrFuelSumHwcLastMonth,last months fuel consumption hot water,,,,5500,,,energy4,,,last month fuel consumption hot water
+#r;w,,PrFuelSumHc,total fuel consumption heating,,,,5600,,,energy4,,,total year fuel consumption heating
+#r;w,,PrEnergySumHc,total energy consumption heating,,,,5700,,,energy4,,,total year electricity consumption heating
+#r;w,,PrEnergySumHwc,total energy consumption hot water,,,,5800,,,energy4,,,total year electricity consumption hot water
+#r;w,,PrFuelSumHwc,total fuel consumption hot water,,,,5900,,,energy4,,,total year fuel consumption hot water
+#r;w,,PrEnergySum,total energy consumption,,,,5C00,,,energy4,,,total year electricity consumption
+#r;w,,PrFuelSum,total fuel consumption,,,,5D00,,,energy4,,,total year fuel consumption
+#r,,xUnknown60,,,,,6000,,,HEX:*,,,
+#r,,xUnknown61,,,,,6100,,,HEX:*,,,
+#r,,xUnknown65,,,,,6500,,,HEX:*,,,
+#r;w,,xUnknown67,(VR70 konfig 1),,,,6700,,,tempv,,,
+#r;w,,xUnknown68,(VR70 konfig 1),,,,6800,,,tempv,,,
+#r;w,,MultiInputSetting,multifunction input configuration,,,,6A00,,,UIN,0=not connected;1=1x circulation;2=photovoltaics;3=Ext.Cooling,,
+#r;w,,Installer1,installer name 1,,,,6C00,,,STR:*,,,installer's name
+#r;w,,Installer2,installer name 2,,,,6D00,,,STR:*,,,installer's name
+#r;w,,PhoneNumber1,phone number 1,,,,6F00,,,STR:*,,,installer's telephone number
+#r;w,,PhoneNumber2,phone number 2,,,,7000,,,STR:*,,,installer's telephone number
+r1,,DisplayedOutsideTemp,outside temperature,,,,7300,,,tempv,,,outside temperature
+#r,,xUnknown75,,,,,7500,,,HEX:*,,,
+#r;w,,KeyCodeforConfigMenu,code for installer menu,,,,7600,,,UIN,,,000-999; code for the installer's menues;;
+#r,,xUnknown77,,,,,7700,,,HEX:*,,,
+#r,,xUnknown7E,,,,,7E00,,,HEX:*,,,
+#r,,xUnknown80,,,,,8000,,,HEX:*,,,
+#r;w,,xUnknown81,,,,,8100,,,HEX:*,,,
+#r;w,,xUnknown85,(constant 0/inf),,,,8500,,,tempv,,,
+#r,,xUnknown86,,,,,8600,,,HEX:*,,,
+#r,,xUnknown89,,,,,8900,,,HEX:*,,,
+#r,,xUnknown8A,,,,,8A00,,,HEX:*,,,
+#r,,xUnknown8B,,,,,8B00,,,HEX:*,,,
+#r,,xUnknown8C,,,,,8C00,,,HEX:*,,,
+#r,,xUnknown8D,,,,,8D00,,,HEX:*,,,
+#r,,xUnknown8E,,,,,8E00,,,HEX:*,,,
+#r,,xUnknown8F,,,,,8F00,,,HEX:*,,,
+#r;w,,OutsideTempAvg,average outside temperature,,,,9500,,,tempv,,,rounded average outsidetemperature (updated every 3h)
+#r,,MaintenanceDue,maintenance due,,,,9600,,,yesno,,,shows whether maintenance is due
+#r,,xUnknown97,,,,,9700,,,HEX:*,,,
+#r,,xUnknown98,,,,,9800,,,HEX:*,,,
+#r,,GreenIQ,,,,,9A00,,,onoff,,,Green IQ mode on thermostat
+#r,,xUnknown9B,,,,,9B00,,,HEX:*,,,
+#r1,,HwcStorageTempTop,hwc storage temperature top,,,,9D00,,,tempv,,,temperature sensor HWC storage top
+#r1,,HwcStorageTempBottom, storage temperature bottom,,,,9E00,,,tempv,,,temperature sensor HWC storage bottom
+#r1,,HcStorageTempTop,hc storage temperature top,,,,1E00,,,tempv,,,temperature sensor HW storage top
+#r1,,HcStorageTempBottom,hc storage temperature bottom,,,,A000,,,tempv,,,temperature sensor HW storage bottom
+#r,,xUnknownA1,,,,,A100,,,HEX:*,,,
+#r;w,,HwcCylinderOffset,Offset cylinder charge,,,,A200,,,calibrationv,,,Offset storage tank loading. Offset
+#r,,xUnknownA5,,,,,A500,,,HEX:*,,,
+#r,,xUnknownAB,,,,,AB00,,,HEX:*,,,
+#r,,xUnknownAF,,,,,AF00,,,HEX:*,,,
+#r,,xUnknownB0,,,,,B000,,,HEX:*,,,
+#r,,xUnknownB1,,,,,B100,,,HEX:*,,,
+#r,,xUnknownB2,,,,,B200,,,HEX:*,,,
+#r,,xUnknownB3,,,,,B300,,,HEX:*,,,
+#r,,xUnknownB5,,,,,B500,,,HEX:*,,,
+#r,,xUnknownB6,,,,,B600,,,HEX:*,,,
+#r,,xUnknownB8,,,,,B800,,,HEX:*,,,
+#r,,xUnknownB9,,,,,B900,,,HEX:*,,,
+#r,,xUnknownBA,,,,,BA00,,,HEX:*,,,
+#r,,xUnknownBB,,,,,BB00,,,HEX:*,,,
+#r,,xUnknownBC,,,,,BC00,,,HEX:*,,,
+#r,,xUnknownBD,,,,,BD00,,,HEX:*,,,
+#r,,xUnknownBF,,,,,BF00,,,HEX:*,,,
+#r,,xUnknownC0,,,,,C000,,,HEX:*,,,
+#r,,xUnknownC1,,,,,C100,,,HEX:*,,,
+#r,,xUnknownC2,,,,,C200,,,HEX:*,,,
+#r,,xUnknownC3,,,,,C300,,,HEX:*,,,
+#r,,xUnknownC4,,,,,C400,,,HEX:*,,,
+#r,,xUnknownC5,,,,,C500,,,HEX:*,,,
+#r,,xUnknownC6,,,,,C600,,,HEX:*,,,
+#r,,xUnknownC7,,,,,C700,,,HEX:*,,,
+#r,,xUnknownC8,,,,,C800,,,HEX:*,,,
+#r,,xUnknownC9,,,,,C900,,,HEX:*,,,
+#r,,xUnknownCA,,,,,CA00,,,HEX:*,,,
+#r,,xUnknownCB,,,,,CB00,,,HEX:*,,,
+#r,,xUnknownCC,,,,,CC00,,,HEX:*,,,
+#r,,xUnknownCD,,,,,CD00,,,HEX:*,,,
+#r,,xUnknownCE,,,,,CE00,,,HEX:*,,,
+#r,,xUnknownCF,,,,,CF00,,,HEX:*,,,
+#r,,xUnknownD0,,,,,D000,,,HEX:*,,,
+#r,,xUnknownD1,,,,,D100,,,HEX:*,,,
+#r,,xUnknownD2,,,,,D200,,,HEX:*,,,
+#r,,xUnknownD3,,,,,D300,,,HEX:*,,,
+#r,,xUnknownD4,,,,,D400,,,HEX:*,,,
+#r,,xUnknownD5,,,,,D500,,,HEX:*,,,
+#r,,xUnknownD6,,,,,D600,,,HEX:*,,,
+#r,,xUnknownD7,,,,,D700,,,HEX:*,,,
+#r,,xUnknownD8,,,,,D800,,,HEX:*,,,
+#r,,xUnknownD9,,,,,D900,,,HEX:*,,,
+#r,,xUnknownDA,,,,,DA00,,,HEX:*,,,
+#r,,xUnknownDB,,,,,DB00,,,HEX:*,,,
+#r,,xUnknownDD,,,,,DD00,,,HEX:*,,,
+#r,,xUnknownDE,,,,,DE00,,,HEX:*,,,
+#r,,xUnknownDF,,,,,DF00,,,HEX:*,,,
+#r,,xUnknownE0,,,,,E000,,,HEX:*,,,
+#r,,xUnknownE3,,,,,E300,,,HEX:*,,,
+#r,,xUnknownE4,,,,,E400,,,HEX:*,,,
+#r,,xUnknownE5,,,,,E500,,,HEX:*,,,
+#r,,xUnknownE6,,,,,E600,,,HEX:*,,,
+#r,,xUnknownE7,,,,,E700,,,HEX:*,,,
+#r,,xUnknownE8,,,,,E800,,,HEX:*,,,
+#r,,xUnknownE9,,,,,E900,,,HEX:*,,,
+#r,,xUnknownEA,,,,,EA00,,,HEX:*,,,
+#r,,xUnknownEB,,,,,EB00,,,HEX:*,,,
+#r,,xUnknownEC,,,,,EC00,,,HEX:*,,,
+#r,,xUnknownED,,,,,ED00,,,HEX:*,,,
+#r,,xUnknownEE,,,,,EE00,,,HEX:*,,,
+#r,,xUnknownEF,(konstant 20),,,,EF00,,,EXP,,,
+#r,,xUnknownF0,,,,,F000,,,HEX:*,,,
+#r,,xUnknownF1,,,,,F100,,,HEX:*,,,
+#r,,xUnknownF2,,,,,F200,,,HEX:*,,,
+#r,,xUnknownF3,,,,,F300,,,HEX:*,,,
+#r,,xUnknownF4,,,,,F400,,,HEX:*,,,
+#r,,xUnknownF5,,,,,F500,,,HEX:*,,,
+#r,,xUnknownF6,(konstant 15),,,,F600,,,EXP,,,
+#r,,xUnknownF7,,,,,F700,,,HEX:*,,,
+#r,,xUnknownF8,,,,,F800,,,HEX:*,,,
+#r,,xUnknownF9,,,,,F900,,,HEX:*,,,
+#r,,xUnknownFA,,,,,FA00,,,HEX:*,,,
+#r,,xUnknownFB,(konstant 10),,,,FB00,,,EXP,,,
+#r,,xUnknownFC,(konstant 62),,,,FC00,,,EXP,,,
+#r,,xUnknownFE,(konstant 13),,,,FE00,,,EXP,,,
+#r,,xUnknownFF,(konstant 25),,,,FF00,,,EXP,,,
+# ##### hot water circuit #####,,,,,,,,,,,,,
+*r,,,,,,B524,02000100,,,IGN:4,,,
+*w,,,,,,B524,02010100,,,,,,
+r1,,HwcEnabled,,,,,0100,,,yesno,,,Indicates if Hwc is enabled/disabled
+#r1,,HwcLegionellaRunActive,,,,,0200,,,yesno,,,Indicates ongoing legionella run
+r1;w,,HwcOpMode,HwcOpMode,,,,0300,,,opmode2,,,Planning mode of Hwc
+r1;w,,HwcTempDesired,Desired Temperature Warm Water Circuit,,,,0400,,,tempv,,,setpoint of domestic hot water circuit
+r1,,HwcStorageTemp,HwcStorageTemp,,,,0500,,,tempv,,,current hot water storage temperature
+r1,,HwcReheatingActive,,,,,0600,,,yesno,,,Indicates ongoing hot/legionella water run
+#r,,HwcUnknown07,,,,,0700,,,HEX:*,,,
+#r,,HwcFlowTemp,HwcFlowTemp,,,,0800,,,tempv,,,desired flow temp for Hwc
+r1;w,,HwcHolidayStartDate,,,,,0900,,,hfrom,,,start date of holidays
+r1;w,,HwcHolidayEndDate,,,,,0A00,,,hto,,,end date of holidays
+r1;w,,HwcSFMode,HwcSFMode,,,,0D00,,,sfmode,,,valid are at least:auto/onedayaway/load
+#r,,HwcUnknown0E,,,,,0E00,,,HEX:*,,,
+#r,,HwcStatus,,,,,0F00,,,zoneStatus,,,
+r1;w,,HwcHolidayStartTime,,,,,1000,,,HTI,,,
+r1;w,,HwcHolidayEndTime,,,,,1100,,,HTI,,,
+#r,,HwcUnknown12,,,,,1200,,,HEX:*,,,
+#r,,HwcUnknown13,,,,,1300,,,HEX:*,,,
+#r;w,,HwcSFMode,HwcSFMode,,,,0D00,,,sfmode,,,		
+# ##### heating circuit 1 #####,,,,,,,,,,,,,
+*r,,,,,,B524,02000200,,,IGN:4,,,
+*w,,,,,,B524,02010200,,,,,,
+#r;w,,Hc1Unknown00,,,,,0000,,,HEX:*,,,
+#r;w,,Hc1Unknown01,,,,,0100,,,HEX:*,,,
+#r,,Hc1CircuitType,CircuitType Heating Circuit 1,,,,0200,,,mctype;IGN:1,,,
+#r;w,,Hc1Unknown04,(konstant 30),,,,0400,,,HEX:*,,,
+#r;w,,Hc1DewPointMonitoring,,,,,0500,,,onoff,,,Dew point monitoring enable/disable for Hc1
+r1,,Hc1CoolingEnabled,,,,,0600,,,onoff,,,Cooling function enable/disable for Hc1
+r1,,Hc1ActualFlowTempDesired,Actual Desired Flow Temperature Heating Circuit 1,,,,0700,,,tempv,,,current flow temperature setpoint of Hc1
+#r,,Hc1FlowTemp,Flow Temperature Heating Circuit 1,,,,0800,,,tempv,,,current flow temperature of Hc1
+#r;w,,Hc1Unknown09,(konstant 60),,,,0900,,,HEX:*,,,
+r1,,Hc1DewPointOffset,Hc1 Temperature offset from dew point,,,,0A00,,,tempv,,,Dew point temperature margin for Hc1
+#r;w,,Hc1ExcessTemp,ExcessTemp Heating Circuit 1,,,,0B00,,,calibrationv,,,excess temperature of Hc1 (flow temperature's setpoint is increased by this value to keep the mixing valve in its control range)
+r1,,Hc1DesiredTemp,Desired Temperature Heating Circuit 1,,,,0C00,,,tempv,,,
+#r;w,,Hc1DesiredSetbackTemp,,,,,0D00,,,tempv,,,target setback temperatur Hc1 (fixed circuit type)
+#r;w,,Hc1SetBackMode,,,,,0E00,,,offmode2,,,operation of Hc1 during the setback time
+#r6;w,,Hc1HeatCurve,Heatcurve Heating Circuit 1,,,,0F00,,,EXP,,,heating curve of Hc1
+#r6;w,,Hc1MaxHeatingFlowTempDesired,MaxFlowTempDesired Heating Circuit 1,,,,1000,,,tempv,,,maximum heating flow temperature setpoint (end emphasis) of Hc1
+#r6;w,,Hc1MinCoolingFlowTempDesired,,,,,1100,,,tempv,,,minimum cooling flow temperature setpoint of Hc1 
+#r6;w,,Hc1MinHeatingFlowTempDesired,MinFlowTempDesired Heating Circuit 1,,,,1200,,,tempv,,,minimum heating flow temperature setpoint (end emphasis) of Hc1
+#r;w,,Hc1Unknown13,,,,,1300,,,HEX:*,,,
+#r;w,,Hc1SummerTempLimit,Switch off temperature threshold Heating Circuit 1,,,,1400,,,tempv,,,if outside temperature > summer limit => heating is OFF;applies to comfort and night setback setpoint;;
+#r;w,,Hc1RoomTempMod,,,,,1500,,,rcmode2,,,room temperature modulation of Hc1
+#r;w,,Hc1Unknown16,,,,,1600,,,HEX:*,,,
+#r;w,,Hc1Unknown17,,,,,1700,,,HEX:*,,,
+#r;w,,Hc1Unknown18,,,,,1800,,,HEX:*,,,
+#r;w,,Hc1Unknown19,,,,,1900,,,HEX:*,,,
+#r,,Hc1MixerPosition,Mixer Position Heating Circuit 1,,,,1A00,,,EXP,,,"status of mixer (<0 closing, >0 opening)"
+r1,,Hc1Status,Status Heating Circuit 1,,,,1B00,,,UCH,,,status of zone 1
+#r,,Hc1HeatCurveAdaption,Adaptive Heatcurve Heating Circuit 1,,,,1C00,,,EXP,,,adaption applied to heating curve of Hc1
+#r;w,,Hc1Unknown1D,,,,,1D00,,,HEX:*,,,
+#r;w,,Hc1PumpStatus,PumpStatus Heating Circuit 1,,,,1E00,,,onoff,,,pump status of zone 1
+#r;w,,Hc1Unknown1F,,,,,1F00,,,HEX:*,,,
+#r;w,,Hc1Unknown20,,,,,2000,,,HEX:*,,,
+# only 'invalid position' messages for higher registers
+# ##### zone 1 #####,,,,,,,,,,,,,
+*r,,,,,,B524,02000300,,,IGN:4,,,
+*w,,,,,,B524,02010300,,,,,,
+#r;w,,z1Unknown00,,,,,0000,,,HEX:*,,,
+r1;w,,z1OpModeCooling,Cooling OpMode Zone 1,,,,0100,,,opmode2,,,Cooling operation mode of zone 1
+r1;w,,z1CoolingRoomTempDesiredTimeControlled,Desired Cooling Room Temperature Zone 1 time controlled,,,,0200,,,tempv,,,manual controlled desired cooling room temperature for zone 1
+#r1;w,,z1HolidayStartDate,,,,,0300,,,hfrom,,,start date of holidays for zone 1
+#r1;w,,z1HolidayEndDate,,,,,0400,,,hto,,,end date of holidays for zone 1
+#r1;w,,z1HolidayTemp,Holiday Period Target Temperature Zone 1,,,,0500,,,tempv,,,holiday setpoint for zone 1
+r1;w,,z1OpModeHeating,Heating OpMode Zone 1,,,,0600,,,opmode2,,,Heating operation mode of zone 1
+r1;w,,z1QuickVetoTemp,Quick Veto Temperature Zone 1,,,,0800,,,tempv,,,manual override setpoint for zone 1
+#r;w,,z1SetBackTemp,Set Back Temperature Zone 1 (time controlled heating),,,,0900,,,tempv,,,set back setpoint for zone 1
+r1;w,,z1SFMode,SFMode Zone 1,,,,0E00,,,sfmode,,,modes 2=party 4=onedayaway 5=onedayhome officially not supported in VRC720
+r1,,z1RoomTemp,Actual Room Temperature Zone 1,,,,0F00,,,tempv,,,aktuelle Raumtemperatur in Zone 1
+#r,,z1Unknown10,,,,,1000,,,HEX:*,,,
+#r,,z1Unknown11,,,,,1100,,,HEX:*,,,
+#r5;w,,z1ValveStatus,Valve Status Zone 1,,,,1200,,,UCH,,,valve status of zone 1
+#r;w,,z1RoomZoneMapping,Raumregler Zuordnung Zone 1,,,,1300,,,zmapping,,,configures which room temperature is assigned to zone 1
+r1,,z1ActualHeatingRoomTempDesired,Actual Desired Heating Room Temperature Zone 1,,,,1400,,,tempv,,,current heating room setpoint considering all basic conditions passed to the control algorithms (0 = heating inactive)
+r1,,z1ActualCoolingRoomTempDesired,Actual Desired Cooling Room Temperature Zone 1,,,,1500,,,tempv,,,current cooling room setpoint considering all basic conditions passed to the control algorithms (99 = cooling inactive)
+#r;w,,z1Shortname,Shortname Zone 1,,,,1600,,,shortname,,,short name of zone 1
+#r;w,,z1Name1,Name Zone 1 Part 1,,,,1700,,,STR:*,,,name of zone 1
+#r;w,,z1Name2,Name Zone 1 Part 2,,,,1800,,,STR:*,,,name of zone 1
+#r,,z1Unknown19,,,,,1900,,,HEX:*,,,
+#r,,z1Unknown1A,,,,,1A00,,,HEX:*,,,
+#r1,,z1Status,,,,,1B00,,,zoneStatus,,,
+#r,,z1Unknown1C,,,,,1C00,,,HEX:*,,,
+r1;w,,z1QuickVetoEndTime,Quick Veto End Time Zone 1,,,,1E00,,,HTI,,,manual override end time for zone 1
+r1;w,,z1QuickVetoEndDate,,,,,2400,,,hto,,,end date of manual override for zone 1
+#r1;w,,z1HolidayEndTime,,,,,2000,,,HTI,,,end time of holidays for zone 1
+#r1;w,,z1HolidayStartTime,,,,,2100,,,HTI,,,start time of holidays for zone 1
+#r1;w,,z1HeatingRoomTempDesiredManualControlled,Desired Heating Room Temperature Zone 1 manual controlled,,,,2200,,,tempv,,,manual controlled desired heating room temperature for zone 1
+#r1;w,,z1CoolingRoomTempDesiredManualControlled,Desired Cooling Room Temperature Zone 1 manual controlled,,,,2300,,,tempv,,,manual controlled desired cooling room temperature for zone 1
+#r;w,,z1SFMode,SFMode Zone 1,,,,0E00,,,sfmode,,,
+#r,,z1Unknown24,,,,,2400,,,HEX:*,,,
+#r,,z1Unknown25,,,,,2500,,,HEX:*,,,
+#r,,z1Unknown26,,,,,2600,,,HEX:*,,,
+#r,,z1Unknown27,,,,,2700,,,HEX:*,,,
+#r,,z1RoomHumidity,,,,,2800,,,EXP,,%,room humidity zone 1
+#r,,z1Unknown29,,,,,2900,,,HEX:*,,,
+#r,,z1Unknown2A,,,,,2A00,,,HEX:*,,,
+#r,,z1Unknown2B,,,,,2B00,,,HEX:*,,,
+#r,,z1Unknown2C,,,,,2C00,,,HEX:*,,,
+#r,,z1Unknown2D,,,,,2D00,,,HEX:*,,,
+#r,,z1Unknown2E,,,,,2E00,,,HEX:*,,,
+# only 'invalid position' messages for higher registers
+# broadcast,,,,,,,,,,,,,
+*r,broadcast,,,,,,,,,IGN:1,,,
+*b,broadcast,,,,FE,,,,,IGN:1,,,
+*w,broadcast,,,,FE,,,,,,,,
+#b,,NoiseReduction,noise reduction state,,,b508,,onoff,,onoff,,,
+# includes,,,,,,,,,,,,,
+!include,errors.inc,,,,,,,,,,,,

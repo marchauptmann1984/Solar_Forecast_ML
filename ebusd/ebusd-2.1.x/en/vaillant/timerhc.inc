@@ -1,0 +1,11 @@
+# type (r[1-9];w;u),circuit,name,[comment],[QQ],ZZ,PBSB,[ID],field1,part (m/s),datatypes/templates,divider/values,unit,comment
+# HC: Periods,,,,,,,,,,,,,
+*r,,,,,,"B515",,,,IGN:1,,,
+*w,,,,,,"B515",,,,,,,
+r;w,,hcTimer.Monday,Periods Monday,,,,0000,,,timer,,,
+r;w,,hcTimer.Tuesday,Periods Tuesday,,,,0100,,,timer,,,
+r;w,,hcTimer.Wednesday,Periods Wednesday,,,,0200,,,timer,,,
+r;w,,hcTimer.Thursday,Periods Thursday,,,,0300,,,timer,,,
+r;w,,hcTimer.Friday,Periods Friday,,,,0400,,,timer,,,
+r;w,,hcTimer.Saturday,Periods Saturday,,,,0500,,,timer,,,
+r;w,,hcTimer.Sunday,Periods Sunday,,,,0600,,,timer,,,
