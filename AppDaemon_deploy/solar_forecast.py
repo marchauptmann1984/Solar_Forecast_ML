@@ -27,7 +27,9 @@ class Forecast(hass.Hass):
             "hourly": ['direct_normal_irradiance', 'diffuse_radiation', 'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high' , 'soil_temperature_0cm', 'snow_depth'],
             }                  
         # define start time and call set_sensor
-        now = datetime.now()       
+        now = datetime.now()
+        #now=datetime(year=2024, month=3, day=15, hour=23, minute=0)
+        #print(now)       
         self.run_every(self.set_sensor,now, 600, pars=parameters, scaler=scale, model=forest_reg_best) 
     def set_sensor(self, kwargs): 
         # call open meteo API and get weather forecast
@@ -97,7 +99,8 @@ class Forecast(hass.Hass):
         forest_reg_best=kwargs["model"]
         predictions=forest_reg_best.predict(data_fc_comb_sc[data_fc_comb.altitude>0])
         df_fc=pd.DataFrame(0, columns=['Time','ForeCast'], index=data_fc_comb.index)
-        df_fc.ForeCast[data_fc_comb.altitude>0]=predictions
+        df_fc['ForeCast'] = df_fc['ForeCast'].astype('float')
+        df_fc.loc[data_fc_comb.altitude>0, "ForeCast"]=predictions
         df_fc.Time=weather_fc_int_1.time_    
         #print(df_fc.Time.values)
         # integrate
@@ -111,9 +114,12 @@ class Forecast(hass.Hass):
         batt_thres=max(min(100-df_fc.ForeCast.values[ind_now:(ind_now+23)].sum()/14.2*100*2/3,95),batt_thresh_min) # assume 1/3 of it is consumed straightaway
         #print(batt_thres)
         # export
+        #print(datetime.now().minute)
+        #print((df_fc.ForeCast.values[ind_now+1]-df_fc.ForeCast.values[ind_now])*datetime.now().minute/60+df_fc.ForeCast.values[ind_now])
         self.set_state("sensor.solar_forecast_hourly",state=np.round(df_fc.ForeCast.values[ind_now],1),attributes={"friendly_name":"Hourly Solar Forecast", "unit_of_measurement": "kWh", "PeakTimes":list(df_fc.Time.dt.strftime('%Y-%m-%dT%H:%M:%S%z+00:00').values), "PeakHeights": list(np.round(df_fc.ForeCast.values,1))})
         self.set_state("sensor.solar_forecast_daily",state=np.round(df_fc_d.ForeCast.values[0],1),attributes={"friendly_name":"Daily Solar Forecast", "unit_of_measurement": "kWh", "PeakTimes":list(df_fc_d.index.strftime('%Y-%m-%dT%H:%M:%S%z+00:00').values), "PeakHeights": list(np.round(df_fc_d.ForeCast.values,1))})
-        self.set_state("sensor.solar_forecast_next12h",state=np.round(df_fc.ForeCast.values[ind_now:(ind_now+23)].sum(),1),attributes={"friendly_name":"Solar Forecast Next 24h", "unit_of_measurement": "kWh"})
+        self.set_state("sensor.solar_forecast_next12h",state=np.round(df_fc.ForeCast.values[ind_now:(ind_now+23)].sum(),1),attributes={"friendly_name":"Solar Forecast Next 24h", "unit_of_measurement": "kWh"})        
+        self.set_state("sensor.solar_forecast_nexthour",state=np.round((df_fc.ForeCast.values[ind_now+1]-df_fc.ForeCast.values[ind_now])*datetime.now().minute/60+df_fc.ForeCast.values[ind_now],1),attributes={"friendly_name":"Solar Forecast Next Hour", "unit_of_measurement": "kWh"})
         self.set_state("input_number.Battery_management_threshold",state=np.round(batt_thres,0),attributes={"friendly_name":"Battery management threshold", "unit_of_measurement": "%"})
 
         

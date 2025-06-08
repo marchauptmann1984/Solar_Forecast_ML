@@ -1,4 +1,7 @@
 ---
+hello_world:
+  module: hello
+  class: HelloWorld
 Solar_Forecast:
   module: solar_forecast
   class: Forecast
