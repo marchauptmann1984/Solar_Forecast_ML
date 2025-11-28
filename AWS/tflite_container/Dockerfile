@@ -15,13 +15,13 @@ RUN pip install awslambdaric
 WORKDIR /var/task
 
 # Install dependencies
-RUN pip install numpy==1.26.4 tflite-runtime==2.14.0
+RUN pip install numpy==1.26.4 tflite-runtime==2.14.0 boto3
 
 # Copy your Lambda function code
 COPY lambda_function.py .
 
 # Copy the model
-COPY sol_pred_mod_NN.tflite .
+# COPY sol_pred_mod_NN.tflite .
 
 # Set the Lambda handler
 CMD ["python", "-m", "awslambdaric", "lambda_function.lambda_handler"]

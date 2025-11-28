@@ -5,3 +5,6 @@ hello_world:
 Solar_Forecast:
   module: solar_forecast
   class: Forecast
+Power_Generated:
+  module: test_history
+  class: HistoryExample
