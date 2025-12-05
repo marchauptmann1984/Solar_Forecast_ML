@@ -8,3 +8,6 @@ Solar_Forecast:
 Power_Generated:
   module: test_history
   class: HistoryExample
+Prices:
+  module: prices
+  class: PriceDATS24  

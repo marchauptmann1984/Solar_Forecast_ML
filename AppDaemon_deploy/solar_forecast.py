@@ -8,7 +8,7 @@ import pytz
 import json
 from scipy import stats
 from joblib import load
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # add other imports later
 
@@ -33,7 +33,7 @@ class Forecast(hass.Hass):
         now = datetime.now()
         #now=datetime(year=2024, month=3, day=15, hour=23, minute=0)
         #print(now)       
-        self.run_every(self.set_sensor,now, 600, pars=parameters, pars2=parameters_2, url="yy", key="xx") 
+        self.run_every(self.set_sensor,now, 600, pars=parameters, pars2=parameters_2, url="https://ehklxvz47g.execute-api.eu-north-1.amazonaws.com/prod/predict", key="my-home-automation-secret") 
     def set_sensor(self, kwargs): 
         #print("start")
         # call open meteo API and get weather forecast
@@ -56,11 +56,11 @@ class Forecast(hass.Hass):
         # make 2 versions at begin and end of interval
         weather_fc_int_1=weather_fc_int.loc[weather_fc_int.index[:-1]] #bv start at 8:00
         weather_fc_int_2=weather_fc_int.loc[weather_fc_int.index[:-1]+1] #bv start at 9:00
-        weather_fc_int_2.index=weather_fc_int.index[:-1]
+        weather_fc_int_2.index=weather_fc_int.index[:-1] # reindex to start at 8:00
         # precipitation and irradiance is preceeding hour, others are instant --> average over interval
-        weather_fc_int=weather_fc_int_2 # precipitation is starting at 9:00, is for hour before (8-9)
+        weather_fc_int=weather_fc_int_2 # precipitation is starting at 9:00, is for hour before (8-9), however start index is for 8:00; due to reindexing
         weather_fc_int.time_=weather_fc_int_1.time_ # time is 8:00 (begin of interval)
-        weather_fc_int.relative_humidity_2m=(weather_fc_int_1.relative_humidity_2m+weather_fc_int_2.relative_humidity_2m)/2 # humidity is averaged for 8:00 and 9:00 
+        weather_fc_int.relative_humidity_2m=(weather_fc_int_1.relative_humidity_2m+weather_fc_int_2.relative_humidity_2m)/2 # humidity is averaged for 8:00 and 9:00, but indexed at 8
         weather_fc_int.cloud_cover_high=(weather_fc_int_1.cloud_cover_high+weather_fc_int_2.cloud_cover_high)/2
         weather_fc_int.cloud_cover_low=(weather_fc_int_1.cloud_cover_low+weather_fc_int_2.cloud_cover_low)/2
         weather_fc_int.cloud_cover_mid=(weather_fc_int_1.cloud_cover_mid+weather_fc_int_2.cloud_cover_mid)/2
@@ -70,6 +70,7 @@ class Forecast(hass.Hass):
         weather_fc_int.loc[np.isnan(weather_fc_int.snow_depth), 'snow_depth']=0
         # merge and prep
         weather_fc_int.drop('time_', axis=1,inplace=True)
+        print(weather_fc_int.head(20))
         data_fc_comb=weather_fc_int
         data_fc_comb = data_fc_comb.astype(float)
         #print(data_fc_comb.head(10))
@@ -101,14 +102,16 @@ class Forecast(hass.Hass):
         print(df_fc.head(30))
         print(df_fc_d.head(30))
         # forecast for current hour --> convert to index
-        ind_now=datetime.now().hour-1
-        #print(ind_now)
+        ind_now=max(datetime.now(timezone.utc).hour,0)
+        print(ind_now)
+        print(datetime.now(timezone.utc))
         # forecast for next 24 hours and conversion to battery threshold
         # get the min threshold
         batt_thresh_min=float(self.entities.input_number.batt_thresh_min.state)
-        batt_thres=max(min(100-df_fc.ForeCast.values[ind_now:(ind_now+23)].sum()/14.2*100*2/3,95),batt_thresh_min) # assume 1/3 of it is consumed straightaway
-        #print(df_fc.ForeCast.values[ind_now])
-        #print(batt_thres)
+        batt_thres=max(min(100-df_fc.ForeCast.values[ind_now:(ind_now+24)].sum()/14.2*100*2/3,95),batt_thresh_min) # assume 1/3 of it is consumed straightaway
+        print(df_fc.ForeCast.values[ind_now+2])
+        print(df_fc.iloc[ind_now+2])
+        print(batt_thres)
         # export
         #print(datetime.now().minute)
         #print((df_fc.ForeCast.values[ind_now+1]-df_fc.ForeCast.values[ind_now])*datetime.now().minute/60+df_fc.ForeCast.values[ind_now])
@@ -118,7 +121,7 @@ class Forecast(hass.Hass):
         #print(np.round(df_fc.ForeCast.values[ind_now],1))
         self.set_state("sensor.solar_forecast_hourly",state=np.round(df_fc.ForeCast.values[ind_now],1)+0.0001,attributes={"friendly_name":"Hourly Solar Forecast", "unit_of_measurement": "kWh", "PeakTimes":list(df_fc.Time.dt.strftime('%Y-%m-%dT%H:%M:%S%z+00:00').values), "PeakHeights": [float(x) for x in list(np.round(df_fc.ForeCast.values,1)+0.0001)]})
         self.set_state("sensor.solar_forecast_daily",state=np.round(df_fc_d.ForeCast.values[0],1)+0.0001,attributes={"friendly_name":"Daily Solar Forecast", "unit_of_measurement": "kWh", "PeakTimes":list(df_fc_d.index.strftime('%Y-%m-%dT%H:%M:%S%z+00:00').values), "PeakHeights": list(np.round(df_fc_d.ForeCast.values,1)+0.0001)})
-        self.set_state("sensor.solar_forecast_next12h",state=np.round(df_fc.ForeCast.values[ind_now:(ind_now+23)].sum(),1),attributes={"friendly_name":"Solar Forecast Next 24h", "unit_of_measurement": "kWh"})        
+        self.set_state("sensor.solar_forecast_next12h",state=np.round(df_fc.ForeCast.values[ind_now:(ind_now+24)].sum(),1),attributes={"friendly_name":"Solar Forecast Next 24h", "unit_of_measurement": "kWh"})        
         self.set_state("sensor.solar_forecast_nexthour",state=np.round((df_fc.ForeCast.values[ind_now+1]-df_fc.ForeCast.values[ind_now])*datetime.now().minute/60+df_fc.ForeCast.values[ind_now],1)+0.0001,attributes={"friendly_name":"Solar Forecast Next Hour", "unit_of_measurement": "kWh"})
         self.set_state("input_number.Battery_management_threshold",state=np.round(batt_thres,0),attributes={"friendly_name":"Battery management threshold", "unit_of_measurement": "%"})
 
