@@ -33,14 +33,15 @@ class HistoryExample(hass.Hass):
         # change to your HA timezone 
         tz = pytz.timezone(tz_name) 
         now = datetime.now(tz)
+        print(now)
         # Build today's 23:59 in local time
         run_time = tz.localize(datetime.combine(now.date()-timedelta(days=1), time(22, 30)))        
         print(run_time)
         self.run_daily(self.calc_mse, run_time, tzinfo=tz, daysback=dayz, tzname=tz_name, pars=parameters, pars2=parameters_2, url_i="https://ehklxvz47g.execute-api.eu-north-1.amazonaws.com/prod/predict", url_t="https://ehklxvz47g.execute-api.eu-north-1.amazonaws.com/prod/retrain", key="my-home-automation-secret")
         #self.run_every(self.calc_mse, now, 120, daysback=dayz, tzname=tz_name, pars=parameters, pars2=parameters_2, url_i="https://ehklxvz47g.execute-api.eu-north-1.amazonaws.com/prod/predict", url_t="https://ehklxvz47g.execute-api.eu-north-1.amazonaws.com/prod/retrain", key="my-home-automation-secret")
-    
+        
     def days_in_year(self, year=datetime.now().year):
-            return 365 + calendar.isleap(year)
+        return 365 + calendar.isleap(year)
     
     def get_forecast(self, para, para_2):
         response = requests.get("https://api.open-meteo.com/v1/forecast",params=para)
@@ -52,11 +53,11 @@ class HistoryExample(hass.Hass):
         weather_fc_int['time_']=weather_fc_int['time']
         weather_fc_int['time'] = pd.to_datetime(weather_fc_int['time'])
         #weather_fc_int['checktime']=weather_fc_int['time']
-        weather_fc_int['time']=(weather_fc_int.time.dt.year-2024)*self.days_in_year(year=2024)*24+weather_fc_int.time.dt.day_of_year*24+weather_fc_int.time.dt.hour
+        weather_fc_int['time']=(weather_fc_int.time.dt.year-2024)*self.days_in_year()*24+weather_fc_int.time.dt.day_of_year*24+weather_fc_int.time.dt.hour
         weather_fc_int.set_index('time', inplace=True)
         weather_fc_int.columns=['relative_humidity_2m', 'precipitation', 'cloud_cover_low',
             'cloud_cover_mid', 'cloud_cover_high', 'soil_temperature_0_to_7cm', 'snow_depth', 'global_tilted_irradiance',
-            'is_day', 'time_']
+            'is_day', 'time_']        
         # make 2 versions at begin and end of interval
         weather_fc_int_1=weather_fc_int.loc[weather_fc_int.index[:-1]]
         weather_fc_int_2=weather_fc_int.loc[weather_fc_int.index[:-1]+1]
@@ -80,7 +81,6 @@ class HistoryExample(hass.Hass):
     
     def calc_mse(self, kwargs):
         days_back=kwargs["daysback"]
-        #print("start")
         # timezone-aware "now" from AppDaemon
         tz_name = kwargs["tzname"] 
         #print(tz_name)
@@ -108,11 +108,9 @@ class HistoryExample(hass.Hass):
 
         # turn into DataFrame for easier timestamp handling
         df = pd.DataFrame(entries)
-        #print(df.last_changed.head(50))
         df["last_changed"] = pd.to_datetime(df["last_changed"], utc=True) # to utc
         df["state"] = pd.to_numeric(df["state"], errors="coerce")
         df = df.dropna(subset=["state"]).sort_values("last_changed").reset_index(drop=True)
-        print(df.last_changed.head(50))
 
         if df.empty:
             self.log("No numeric states in history.")
@@ -169,14 +167,10 @@ class HistoryExample(hass.Hass):
 
             hours.append(h_start.hour)
             days.append(h_start.day)
-            energies.append(energy)
-        print (energies)
-        print (hours)
-        print (days)
+            energies.append(energy)    
         # get forecast
-        data_fc_comb, Time=self.get_forecast(kwargs["pars"], kwargs["pars2"])
-        print(data_fc_comb)
-         # prediction
+        data_fc_comb, Time=self.get_forecast(kwargs["pars"], kwargs["pars2"])        
+        # prediction
         X_in = data_fc_comb[data_fc_comb.is_day>0].iloc[:, 0:8].values.tolist()
         url = kwargs["url_i"]
         headers = {
@@ -196,29 +190,23 @@ class HistoryExample(hass.Hass):
         df_fc=pd.DataFrame(0, columns=['timestamp','forecast_kwh'], index=data_fc_comb.index)
         df_fc['forecast_kwh'] = df_fc['forecast_kwh'].astype('float')
         df_fc.loc[data_fc_comb.is_day>0, "forecast_kwh"]=predictions  
-        df_fc.timestamp=pd.to_datetime(Time)
-        print(df_fc.head(20)) 
+        df_fc.timestamp=pd.to_datetime(Time)        
         # put back actual prediction input data
         df_fc = df_fc.join(data_fc_comb)   
         df_fc['day'] = df_fc.timestamp.dt.day.tolist()  
         df_fc['hour'] = df_fc.timestamp.dt.hour.tolist()  
-        print("bro")
-        print(df_fc.head(20))  
         # merge
         # Build actual energy DataFrame
         df_actual = pd.DataFrame({
             "day": days,
             "hour": hours,
             "actual_kwh": energies
-        })
-        print("motherfucker")
-        print(df_actual)
+        })        
         # Merge on hour using inner join to keep only overlapping hours
         df_combined = pd.merge(df_actual, df_fc, on=["hour", "day"], how="inner")
 
         # Optional: sort by hour
-        df_combined = df_combined.sort_values(["day","hour"]).reset_index(drop=True)
-        print(df_combined)
+        df_combined = df_combined.sort_values(["day","hour"]).reset_index(drop=True)        
         #df_combined.to_csv("/config/my_data.csv", index=False)
         df_combined=df_combined[df_combined.forecast_kwh>0.0]
         print(df_combined.iloc[:, 0:5].tail(24))        
