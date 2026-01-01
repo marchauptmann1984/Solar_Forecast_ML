@@ -241,7 +241,16 @@ class HistoryExample(hass.Hass):
            response = requests.post(kwargs["url_t"], json=payload, headers=headers)
            try:
                print(response.json())
+               print("success" in response.text)
            except Exception:
-               print(response.text)                       
+               print(response.text)
+               if "Service Unavailable" in response.text:
+                   print(f"Lambda is cold. Waiting 30s seconds before retry...")
+                   time.sleep(30)
+                   response = requests.post(kwargs["url_t"], json=payload, headers=headers)
+                   try:
+                       print(response.json())
+                   except Exception:
+                       print(response.text)
         else:
            print("RMSE is acceptable. Retraining not required.")
